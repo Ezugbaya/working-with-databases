@@ -6,12 +6,19 @@ import com.javarush.domain.CountryLanguage;
 import com.javarush.redis.CityCountry;
 import com.javarush.redis.Language;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class CityCountryService {
 
-    public CityCountry mapCity(City city) {
+    public List<CityCountry> mapCities(List<City> cities) {
+        return cities.stream()
+                .map(this::mapCity)
+                .collect(Collectors.toList());
+    }
+
+    private CityCountry mapCity(City city) {
 
         CityCountry result = new CityCountry();
 
