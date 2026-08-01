@@ -1,10 +1,19 @@
 package com.javarush.app;
 
-import com.javarush.service.CountryService;
+import com.javarush.redis.RedisClientHolder;
+import io.lettuce.core.api.sync.RedisCommands;
 
 public class Main {
 
     public static void main(String[] args) {
-        new CountryService().test();
+
+        RedisCommands<String, String> commands =
+                RedisClientHolder.getConnection().sync();
+
+        commands.set("test", "Hello Redis");
+
+        System.out.println(commands.get("test"));
+
+        RedisClientHolder.shutdown();
     }
 }
