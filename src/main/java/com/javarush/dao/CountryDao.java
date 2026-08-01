@@ -14,6 +14,12 @@ public class CountryDao {
     }
 
     public List<Country> findAll() {
-        return session.createQuery("from Country", Country.class).list();
+
+        return session.createQuery(
+                "select distinct c " +
+                        "from Country c " +
+                        "left join fetch c.languages",
+                Country.class
+        ).list();
     }
 }
