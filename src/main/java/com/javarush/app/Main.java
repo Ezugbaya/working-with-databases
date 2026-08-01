@@ -34,6 +34,12 @@ public class Main {
 
         System.out.println("В Redis сохранено стран: " + countries.size());
 
+        List<CountryDto> cache = redisService.getCountries();
+
+        System.out.println("Из Redis считано стран: " + cache.size());
+
+        System.out.println(cache.get(0).getName());
+
         RedisClientHolder.shutdown();
     }
 }

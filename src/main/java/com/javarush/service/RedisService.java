@@ -1,6 +1,7 @@
 package com.javarush.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javarush.dto.CountryDto;
 import com.javarush.redis.RedisClientHolder;
@@ -22,7 +23,14 @@ public class RedisService {
         commands.set("countries", json);
     }
 
-    public String getCountries() {
-        return commands.get("countries");
+    public List<CountryDto> getCountries() throws JsonProcessingException {
+
+        String json = commands.get("countries");
+
+        return objectMapper.readValue(
+                json,
+                new TypeReference<List<CountryDto>>() {
+                }
+        );
     }
 }
