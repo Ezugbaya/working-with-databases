@@ -1,18 +1,38 @@
 package com.javarush.app;
 
+import com.javarush.dao.CountryDao;
+import com.javarush.domain.Country;
+import com.javarush.dto.CountryDto;
+import com.javarush.mapper.EntityMapper;
 import com.javarush.redis.RedisClientHolder;
-import io.lettuce.core.api.sync.RedisCommands;
+import com.javarush.service.RedisService;
+import com.javarush.util.HibernateUtil;
+import org.hibernate.Session;
+
+import java.util.List;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
-        RedisCommands<String, String> commands =
-                RedisClientHolder.getConnection().sync();
+        List<CountryDto> countries;
 
-        commands.set("test", "Hello Redis");
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
-        System.out.println(commands.get("test"));
+            CountryDao dao = new CountryDao(session);
+
+            List<Country> countryList = dao.findAll();
+
+            EntityMapper mapper = new EntityMapper();
+
+            countries = mapper.toDto(countryList);
+        }
+
+        RedisService redisService = new RedisService();
+
+        redisService.saveCountries(countries);
+
+        System.out.println("В Redis сохранено стран: " + countries.size());
 
         RedisClientHolder.shutdown();
     }
