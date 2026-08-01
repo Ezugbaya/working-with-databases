@@ -1,28 +1,19 @@
 package com.javarush.app;
 
+import com.javarush.dao.CityDao;
 import com.javarush.dao.CountryDao;
-import com.javarush.domain.Country;
-
-import java.util.List;
+import com.javarush.dao.CountryLanguageDao;
 
 public class Main {
 
     public static void main(String[] args) {
 
         CountryDao countryDao = new CountryDao();
+        CityDao cityDao = new CityDao();
+        CountryLanguageDao languageDao = new CountryLanguageDao();
 
-        List<Country> countries = countryDao.findAll();
-
-        System.out.println("Количество стран: " + countries.size());
-
-        for (int i = 0; i < 10 && i < countries.size(); i++) {
-
-            Country country = countries.get(i);
-
-            System.out.println(
-                    country.getId() + " | " +
-                            country.getName()
-            );
-        }
+        System.out.println("Стран: " + countryDao.findAll().size());
+        System.out.println("Городов: " + cityDao.findAll().size());
+        System.out.println("Языков: " + languageDao.findAll().size());
     }
 }
